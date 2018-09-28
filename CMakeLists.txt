@@ -7,6 +7,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_library(dmpCoreLib
   src/impl.c
-  src/Allocator.c)
+  src/Allocator.c
+  src/Version.c
+  )
 
-target_include_directories(dmpCoreLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(dmpCoreLib
+  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+  )
