@@ -4,90 +4,125 @@
 
 #include "utility/Assert.h"
 
-static const DmpAllocator defaultAllocatorObj
-    = { malloc, calloc, realloc, free, aligned_alloc, aligned_free };
+static void * systemMalloc(size_t byteSize, void * userData)
+{
+   return malloc(byteSize);
+}
+
+static void * systemCalloc(size_t num, size_t byteSize, void * userData)
+{
+   return calloc(num, byteSize);
+}
+
+static void * systemRealloc(void * toRealloc, size_t newByteSize, void * userData)
+{
+   return realloc(toRealloc, newByteSize);
+}
+
+static void systemFree(void * toFree, void * userData)
+{
+   free(toFree);
+}
+
+static void * systemAlignedAlloc(size_t alignment, size_t byteSize, void * userData)
+{
+   return aligned_alloc(alignment, byteSize);
+}
+
+static void systemAlignedFree(void * toFree, void * userData)
+{
+   aligned_free(toFree);
+}
+
+static const DmpAllocator defaultAllocatorObj = { .mallocFn = systemMalloc,
+   .callocFn = systemCalloc,
+   .reallocFn = systemRealloc,
+   .freeFn = systemFree,
+   .alignedAllocFn = systemAlignedAlloc,
+   .alignedFreeFn = systemAlignedFree,
+   .userData = NULL };
 
 DmpAllocator getDefaultAllocator()
 {
    return defaultAllocatorObj;
 }
 
-void* dmpMalloc(size_t byteSize, const DmpAllocator* DMP_RESTRICT alloc)
+void * dmpMalloc(size_t byteSize, const DmpAllocator * DMP_RESTRICT alloc)
 {
    if (alloc)
    {
       dmpExpect("Non-null allocator has mallocFn set", alloc->mallocFn);
-      return alloc->mallocFn(byteSize);
+      return alloc->mallocFn(byteSize, alloc->userData);
    }
 
    dmpExpect("Default allocator has mallocFn set", defaultAllocatorObj.mallocFn);
 
-   return defaultAllocatorObj.mallocFn(byteSize);
+   return defaultAllocatorObj.mallocFn(byteSize, defaultAllocatorObj.userData);
 }
 
-void* dmpCalloc(size_t numElems, size_t byteSize, const DmpAllocator* DMP_RESTRICT alloc)
+void * dmpCalloc(size_t numElems, size_t byteSize, const DmpAllocator * DMP_RESTRICT alloc)
 {
    if (alloc)
    {
       dmpExpect("Non-null allocator has callocFn set", alloc->callocFn);
-      return alloc->callocFn(numElems, byteSize);
+      return alloc->callocFn(numElems, byteSize, alloc->userData);
    }
 
    dmpExpect("Default allocator has callocFn set", defaultAllocatorObj.callocFn);
 
-   return defaultAllocatorObj.callocFn(numElems, byteSize);
+   return defaultAllocatorObj.callocFn(numElems, byteSize, defaultAllocatorObj.userData);
 }
 
-void* dmpRealloc(void* p, size_t newByteSize, const DmpAllocator* DMP_RESTRICT alloc)
+void * dmpRealloc(void * p, size_t newByteSize, const DmpAllocator * DMP_RESTRICT alloc)
 {
    if (alloc)
    {
       dmpExpect("Non-null allocator has reallocFn set", alloc->reallocFn);
-      return alloc->reallocFn(p, newByteSize);
+      return alloc->reallocFn(p, newByteSize, alloc->userData);
    }
 
    dmpExpect("Default allocator has reallocFn set", defaultAllocatorObj.reallocFn);
 
-   return defaultAllocatorObj.reallocFn(p, newByteSize);
+   return defaultAllocatorObj.reallocFn(p, newByteSize, defaultAllocatorObj.userData);
 }
 
-void dmpFree(void* p, const DmpAllocator* DMP_RESTRICT alloc)
+void dmpFree(void * p, const DmpAllocator * DMP_RESTRICT alloc)
 {
    if (alloc)
    {
       dmpExpect("Non-null allocator has freeFn set", alloc->freeFn);
-      alloc->freeFn(p);
+      alloc->freeFn(p, alloc->userData);
       return;
    }
 
    dmpExpect("Default allocator has freeFn set", defaultAllocatorObj.freeFn);
 
-   defaultAllocatorObj.freeFn(p);
+   defaultAllocatorObj.freeFn(p, defaultAllocatorObj.userData);
 }
 
-void* dmpAlignedAlloc(size_t alignment, size_t byteSize, const DmpAllocator* DMP_RESTRICT alloc)
+void * dmpAlignedAlloc(size_t alignment, size_t byteSize, const DmpAllocator * DMP_RESTRICT alloc)
 {
    if (alloc)
    {
       dmpExpect("Non-null allocator has alignedAllocFn set", alloc->alignedAllocFn);
-      return alloc->alignedAllocFn(alignment, byteSize);
+      return alloc->alignedAllocFn(alignment, byteSize, alloc->userData);
    }
 
    dmpExpect("Default allocator has alignedAllocFn set", defaultAllocatorObj.alignedAllocFn);
 
-   return defaultAllocatorObj.alignedAllocFn(alignment, byteSize);
+   return defaultAllocatorObj.alignedAllocFn(alignment, byteSize, defaultAllocatorObj.userData);
 }
 
-void dmpAlignedFree(void* p, const DmpAllocator* DMP_RESTRICT alloc)
+void dmpAlignedFree(void * p, const DmpAllocator * DMP_RESTRICT alloc)
 {
    if (alloc)
    {
       dmpExpect("Non-null allocator has alignedFreeFn set", alloc->alignedFreeFn);
-      alloc->alignedFreeFn(p);
+      alloc->alignedFreeFn(p, alloc->userData);
       return;
    }
 
    dmpExpect("Default allocator has alignedFreeFn set", defaultAllocatorObj.alignedFreeFn);
 
-   defaultAllocatorObj.alignedFreeFn(p);
+   defaultAllocatorObj.alignedFreeFn(p, defaultAllocatorObj.userData);
 }
