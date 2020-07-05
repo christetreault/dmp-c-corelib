@@ -1,44 +1,57 @@
 #include "version/Version.h"
 
-DmpVersion dmpVersionCreate(uint32_t major,
-                            uint32_t minor,
-                            uint32_t patch)
+DmpVersion dmpVersionCreate(uint32_t major, uint32_t minor, uint32_t patch)
 {
-  DmpVersion ver;
+   DmpVersion ver;
 
-  ver.major = major;
-  ver.minor = minor;
-  ver.patch = patch;
+   ver.major = major;
+   ver.minor = minor;
+   ver.patch = patch;
 
-  return ver;
+   return ver;
 }
 
-bool dmpVersionGE(DmpVersion lhs,
-                  DmpVersion rhs)
+int dmpVersionCmp(DmpVersion lhs, DmpVersion rhs)
 {
-  bool majorGE = lhs.major >= rhs.major;
-  bool minorGE = lhs.minor >= rhs.minor;
-  bool patchGE = lhs.patch >= rhs.patch;
+   if (lhs.major < rhs.major)
+      return -1;
+   else if (lhs.major > rhs.major)
+      return 1;
 
-  return majorGE && minorGE && patchGE;
+   if (lhs.minor < rhs.minor)
+      return -1;
+   else if (lhs.minor > rhs.minor)
+      return 1;
+
+   if (lhs.patch < rhs.patch)
+      return -1;
+   else if (lhs.patch > rhs.patch)
+      return 1;
+
+   return 0;
 }
 
-bool dmpVersionLT(DmpVersion lhs,
-                  DmpVersion rhs)
+bool dmpVersionGT(DmpVersion lhs, DmpVersion rhs)
 {
-  bool majorLT = lhs.major < rhs.major;
-  bool minorLT = lhs.minor < rhs.minor;
-  bool patchLT = lhs.patch < rhs.patch;
-
-  return majorLT && minorLT && patchLT;
+   return dmpVersionCmp(lhs, rhs) > 0;
 }
 
-bool dmpVersionEQ(DmpVersion lhs,
-                  DmpVersion rhs)
+bool dmpVersionGE(DmpVersion lhs, DmpVersion rhs)
 {
-  bool majorEQ = lhs.major == rhs.major;
-  bool minorEQ = lhs.minor == rhs.minor;
-  bool patchEQ = lhs.patch == rhs.patch;
+   return dmpVersionCmp(lhs, rhs) >= 0;
+}
 
-  return majorEQ && minorEQ && patchEQ;
+bool dmpVersionEQ(DmpVersion lhs, DmpVersion rhs)
+{
+   return dmpVersionCmp(lhs, rhs) == 0;
+}
+
+bool dmpVersionLE(DmpVersion lhs, DmpVersion rhs)
+{
+   return dmpVersionCmp(lhs, rhs) <= 0;
+}
+
+bool dmpVersionLT(DmpVersion lhs, DmpVersion rhs)
+{
+   return dmpVersionCmp(lhs, rhs) < 0;
 }
