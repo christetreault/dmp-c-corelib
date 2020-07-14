@@ -13,8 +13,12 @@ add_library(dmpCoreLib
   ${headers}
   )
 
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${sources} ${headers})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}
+  FILES ${sources} ${headers})
 
 target_include_directories(dmpCoreLib
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
   )
+
+set_target_properties(dmpCoreLib
+  PROPERTIES FOLDER "libraries")

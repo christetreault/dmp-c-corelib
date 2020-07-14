@@ -39,29 +39,32 @@ DmpAllocator getDefaultAllocator();
 /**
  * @brief invoke the mallocFn of alloc, or the default allocator if null
  */
-void * dmpMalloc(size_t byteSize, const DmpAllocator * DMP_RESTRICT alloc);
+void * dmpMalloc(const DmpAllocator * DMP_RESTRICT alloc, size_t byteSize);
 
 /**
  * @brief invoke the callocFn of alloc, or the default allocator if null
  */
-void * dmpCalloc(size_t numElems, size_t byteSize, const DmpAllocator * DMP_RESTRICT alloc);
+void * dmpCalloc(
+    const DmpAllocator * DMP_RESTRICT alloc, size_t numElems, size_t byteSize);
 
 /**
  * @brief invoke the reallocFn of alloc, or the default allocator if null
  */
-void * dmpRealloc(void * p, size_t newByteSize, const DmpAllocator * DMP_RESTRICT alloc);
+void * dmpRealloc(
+    const DmpAllocator * DMP_RESTRICT alloc, void * p, size_t newByteSize);
 
 /**
  * @brief invoke the freeFn of alloc, or the default allocator if null
  */
-void dmpFree(void * p, const DmpAllocator * DMP_RESTRICT alloc);
+void dmpFree(const DmpAllocator * DMP_RESTRICT alloc, void * p);
 
 /**
  * @brief invoke the alignedAllocFn of alloc, or the default allocator if null
  */
-void * dmpAlignedAlloc(size_t alignment, size_t byteSize, const DmpAllocator * DMP_RESTRICT alloc);
+void * dmpAlignedAlloc(
+    const DmpAllocator * DMP_RESTRICT alloc, size_t alignment, size_t byteSize);
 
 /**
  * @brief invoke the alignedFreeFn of alloc, or the default allocator if null
  */
-void dmpAlignedFree(void * p, const DmpAllocator * DMP_RESTRICT alloc);
+void dmpAlignedFree(const DmpAllocator * DMP_RESTRICT alloc, void * p);
