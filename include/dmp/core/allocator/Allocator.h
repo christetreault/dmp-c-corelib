@@ -2,8 +2,8 @@
 
 #include <stdlib.h>
 
-#include "dmp/portability/Allocator.h"
-#include "dmp/portability/Restrict.h"
+#include "dmp/core/portability/Allocator.h"
+#include "dmp/core/portability/Restrict.h"
 
 // void * DmpMallocFn(size_t byteSize, void * userData)
 typedef void * (*DmpMallocFn)(size_t, void *);

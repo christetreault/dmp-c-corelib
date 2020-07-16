@@ -1,6 +1,6 @@
 #pragma once
 
-#include "dmp/portability/DebugTrap.h"
+#include "dmp/core/portability/DebugTrap.h"
 
 #include <stdio.h>
 #include <stdlib.h>

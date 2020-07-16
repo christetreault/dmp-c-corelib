@@ -1,4 +1,4 @@
-#include "dmp/utility/Version.h"
+#include "dmp/core/utility/Version.h"
 
 DmpVersion dmpVersionCreate(uint32_t major, uint32_t minor, uint32_t patch)
 {
