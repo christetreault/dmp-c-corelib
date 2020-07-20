@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
-#include "dmp/core/allocator/Allocator.h"
-#include "dmp/core/utility/Assert.h"
+#include "dmp/core/Allocator.h"
+#include "dmp/core/Assert.h"
 
 static void * systemMalloc(size_t byteSize, void * userData)
 {
